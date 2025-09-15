@@ -13,24 +13,22 @@ SSH_BANNER = "SSH-2.0-MySSHServer_1.0"
 host_key = paramiko.RSAKey(filename='server.key')
 
 # Loggers & Logging Files
-# We have log the Username, IP, Password into a file 
-
-funnel_logger = logging.getLogger('FunnelLogger') # Thats the file log file where the logs are goin g to save (with getLogger) here we are going to store the Username, Ip Password
-funnel_logger.setLevel(logging.INFO) # Set the level of logs which is gone be INFO - It provide the general Information of logs
+funnel_logger = logging.getLogger('FunnelLogger')
+funnel_logger.setLevel(logging.INFO)
 funnel_handler = RotatingFileHandler('audits.log', maxBytes=1000000, backupCount=5)
 funnel_handler.setFormatter(logging_format)
 funnel_logger.addHandler(funnel_handler)
 
-creds_logger = logging.getLogger('CredslLogger') # Thats the file log file where the logs are goin g to save (with getLogger) But, here the commands are going to save
-creds_logger.setLevel(logging.INFO) # Set the level of logs which is gone be INFO - It provide the general Information of logs
+creds_logger = logging.getLogger('CredslLogger')
+creds_logger.setLevel(logging.INFO)
 creds_handler = RotatingFileHandler('cmd_audits.log', maxBytes=1000000, backupCount=5)
 creds_handler.setFormatter(logging_format)
 creds_logger.addHandler(creds_handler)
 
-# Emulateed Shell - Creating a emulated shell as well as that SSH server with paramiko
+# Emulateed Shell
 
-def emulated_shell(channel, client_ip) : # CHANNEL - way to communicate or sending dialog maaseges and strings
-    channel.send(b'corporate.jumpbox2$ ') # this is will pop up when an attacker 
+def emulated_shell(channel, client_ip):
+    channel.send(b'corporate.jumpbox2$ ')
     command = b""
     while True:
         char = channel.recv(1)
@@ -158,7 +156,7 @@ def client_handle(client, addr, username, password):
 
 def honeypot(address, port, username, password):
 
-    socks = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # Here socket.AF_INET - Tells the connection is from IPv4 and socket.SOCK_STREAM means we are listning on TCP port
+    socks = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     socks.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     socks.bind((address, port))
 
